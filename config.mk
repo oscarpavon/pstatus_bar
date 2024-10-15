@@ -12,7 +12,7 @@ X11LIB = /usr/lib/X11
 
 # includes and libs
 INCS = -I. -I/usr/include -I${X11INC}
-LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lpulse
+LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lpulse -lpthread
 
 # flags
 CPPFLAGS = -DVERSION=\"${VERSION}\" -D_DEFAULT_SOURCE

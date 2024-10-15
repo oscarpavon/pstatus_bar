@@ -125,7 +125,7 @@ main(void)
 	}
 
 	for (;;sleep(0.5f)) {
-		time_date = mktimes("%a %d %b %H:%M %Y", tzasuncion);
+		time_date = mktimes("%a %d %b %H:%M:%S %Y", tzasuncion);
 		mic_status = "off";
 
 		/*
@@ -146,7 +146,7 @@ main(void)
 			screen_rec_status = "";
 		}
 
-		status = smprintf("%s Mic: %s | %s", screen_rec_status, mic_status, time_date);
+		status = smprintf("%s Mic: %s | V: %u%% %s" ,screen_rec_status , mic_status, volume_percentage,  time_date);
 		setstatus(status);
 
 		free(time_date);
