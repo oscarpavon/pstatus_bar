@@ -1,3 +1,5 @@
+#include <pulse/context.h>
+#include <pulse/mainloop.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +14,8 @@
 #include <sys/stat.h>
 
 #include <X11/Xlib.h>
+
+#include "pulse.h"
 
 char *tzasuncion = "America/Asuncion";
 char *tzutc = "UTC";
@@ -109,6 +113,12 @@ main(void)
 	char *getted_mic_status;
 	char *screen_rec_status;
 
+
+
+	
+	pulse_init();
+
+
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
 		return 1;
@@ -139,7 +149,6 @@ main(void)
 		status = smprintf("%s Mic: %s | %s", screen_rec_status, mic_status, time_date);
 		setstatus(status);
 
-		//free(surfs);
 		free(time_date);
 		free(status);
 	}
