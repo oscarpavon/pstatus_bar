@@ -15,14 +15,11 @@
 
 #include <X11/Xlib.h>
 
-#include "pulse.h"
-
 char *tzasuncion = "America/Asuncion";
 char *tzutc = "UTC";
 
 static Display *dpy;
 
-#define NULL ((void*)0)
 
 char *
 smprintf(char *fmt, ...)
@@ -103,6 +100,7 @@ execscript(char *cmd)
 	return smprintf("%s", retval);
 }
 
+
 int
 main(void)
 {
@@ -110,13 +108,9 @@ main(void)
 	char *time_date;
 
 	char *mic_status;
-	char *getted_mic_status;
 	char *screen_rec_status;
 
 
-
-	
-	pulse_init();
 
 
 	if (!(dpy = XOpenDisplay(NULL))) {
@@ -124,18 +118,34 @@ main(void)
 		return 1;
 	}
 
-	for (;;sleep(0.5f)) {
-		time_date = mktimes("%a %d %b %H:%M:%S %Y", tzasuncion);
-		mic_status = "off";
+		
 
-		/*
-		getted_mic_status = execscript("pulsemixer --id $(grep_webcam_mic_source) --get-mute");
-		if(getted_mic_status[0] == '1'){
-			mic_status = "Mute";
-		}else {
-			mic_status = "on";
+	for (;;usleep(50000)) {
+		time_date = mktimes("%a %d %b %H:%M:%S %Y", tzasuncion);
+	
+		char got_mic_status[2];
+		FILE* mic_file = fopen("/tmp/mic", "r");
+		if(mic_file){
+		
+			fgets(got_mic_status, 5, mic_file);
+			
+			if(got_mic_status[0] == '1'){
+				mic_status = "Mute";
+			}else{
+				mic_status = "On";
+			}
+
+			fclose(mic_file);
 		}
-	*/	
+
+
+		char volume[5];
+		FILE* volume_file = fopen("/tmp/volume", "r");
+		if(volume_file){
+			fgets(volume, 5, volume_file);
+			fclose(volume_file);
+		}
+		
 		screen_rec_status = "";
 		FILE* file = fopen("/tmp/screen_capture_status", "r");
 
@@ -146,7 +156,7 @@ main(void)
 			screen_rec_status = "";
 		}
 
-		status = smprintf("%s Mic: %s | V: %u%% %s" ,screen_rec_status , mic_status, volume_percentage,  time_date);
+		status = smprintf("%s Mic: %s | V: %s %s" ,screen_rec_status , mic_status, volume,  time_date);
 		setstatus(status);
 
 		free(time_date);
