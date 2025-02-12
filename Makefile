@@ -27,15 +27,6 @@ clean:
 	@echo cleaning
 	@rm -f ${NAME} ${OBJ} ${NAME}-${VERSION}.tar.gz
 
-dist: clean
-	@echo creating dist tarball
-	@mkdir -p ${NAME}-${VERSION}
-	@cp -R Makefile LICENSE config.mk \
-		${SRC} ${NAME}-${VERSION}
-	@tar -cf ${NAME}-${VERSION}.tar ${NAME}-${VERSION}
-	@gzip ${NAME}-${VERSION}.tar
-	@rm -rf ${NAME}-${VERSION}
-
 install: all
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin

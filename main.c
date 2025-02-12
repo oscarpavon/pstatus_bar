@@ -110,7 +110,8 @@ main(void)
 	char *mic_status;
 	char *screen_rec_status;
 
-
+	char *available_memory;
+	char *used_memory;
 
 
 	if (!(dpy = XOpenDisplay(NULL))) {
@@ -119,6 +120,7 @@ main(void)
 	}
 
 		
+	mic_status = "No";
 
 	for (;;usleep(50000)) {
 		time_date = mktimes("%a %d %b %H:%M:%S %Y", tzasuncion);
@@ -156,7 +158,11 @@ main(void)
 			screen_rec_status = "";
 		}
 
-		status = smprintf("%s Mic: %s | V: %s %s" ,screen_rec_status , mic_status, volume,  time_date);
+		used_memory = execscript("free -h | awk '(NR==2){print $3}'");
+		available_memory = execscript("free -h | awk '(NR==2){print $2}'");
+
+		status = smprintf("%s Mic: %s | V: %s | Mem: %s/%s | %s" ,
+				screen_rec_status , mic_status, volume, used_memory, available_memory,  time_date);
 		setstatus(status);
 
 		free(time_date);
